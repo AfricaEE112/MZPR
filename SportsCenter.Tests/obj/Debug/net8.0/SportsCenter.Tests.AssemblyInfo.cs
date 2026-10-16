@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("SportsCenter.Tests")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+8b6c826065ffb4cd7037718bafdb6a7a5754a3ae")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+62a9944547b021ab6e441c0794fdacafb992cb7d")]
 [assembly: System.Reflection.AssemblyProductAttribute("SportsCenter.Tests")]
 [assembly: System.Reflection.AssemblyTitleAttribute("SportsCenter.Tests")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

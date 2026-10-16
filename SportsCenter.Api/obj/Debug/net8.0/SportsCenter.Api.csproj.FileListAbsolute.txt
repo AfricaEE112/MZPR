@@ -34,3 +34,6 @@
 /home/user/SportsCenterSystem/SportsCenter.Api/obj/Debug/net8.0/SportsCenter.Api.pdb
 /home/user/SportsCenterSystem/SportsCenter.Api/obj/Debug/net8.0/SportsCenter.Api.genruntimeconfig.cache
 /home/user/SportsCenterSystem/SportsCenter.Api/obj/Debug/net8.0/ref/SportsCenter.Api.dll
+/home/user/SportsCenterSystem/SportsCenter.Api/bin/Debug/net8.0/Microsoft.EntityFrameworkCore.dll
+/home/user/SportsCenterSystem/SportsCenter.Api/bin/Debug/net8.0/Microsoft.EntityFrameworkCore.Abstractions.dll
+/home/user/SportsCenterSystem/SportsCenter.Api/bin/Debug/net8.0/Microsoft.EntityFrameworkCore.InMemory.dll

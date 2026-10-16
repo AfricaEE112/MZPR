@@ -110,3 +110,6 @@
 /home/user/SportsCenterSystem/SportsCenter.Tests/obj/Debug/net8.0/SportsCenter.Tests.pdb
 /home/user/SportsCenterSystem/SportsCenter.Tests/obj/Debug/net8.0/SportsCenter.Tests.genruntimeconfig.cache
 /home/user/SportsCenterSystem/SportsCenter.Tests/obj/Debug/net8.0/ref/SportsCenter.Tests.dll
+/home/user/SportsCenterSystem/SportsCenter.Tests/bin/Debug/net8.0/Microsoft.EntityFrameworkCore.dll
+/home/user/SportsCenterSystem/SportsCenter.Tests/bin/Debug/net8.0/Microsoft.EntityFrameworkCore.Abstractions.dll
+/home/user/SportsCenterSystem/SportsCenter.Tests/bin/Debug/net8.0/Microsoft.EntityFrameworkCore.InMemory.dll
