@@ -40,6 +40,38 @@ public class ActivityTypesControllerTests
         Assert.Same(activityType, createdAtActionResult.Value);
     }
 
+    [Fact]
+    public async Task Put_ReturnsNoContent_WhenUpdateIsSuccessful()
+    {
+        using var context = CreateContext();
+        var activityType = new ActivityType { Id = 1, Name = "Yoga" };
+        context.ActivityTypes.Add(activityType);
+        await context.SaveChangesAsync();
+
+        var controller = new ActivityTypesController(context);
+        var updatedActivityType = new ActivityType { Id = 1, Name = "Pilates" };
+
+        var result = await controller.Put(activityType.Id, updatedActivityType);
+
+        Assert.IsType<NoContentResult>(result);
+    }
+
+    [Fact]
+    public async Task Delete_ReturnsNoContent_WhenDeleteIsSuccessful()
+    {
+        using var context = CreateContext();
+        var activityType = new ActivityType { Id = 1, Name = "Yoga" };
+        context.ActivityTypes.Add(activityType);
+        await context.SaveChangesAsync();
+
+        var controller = new ActivityTypesController(context);
+
+        var result = await controller.Delete(activityType.Id);
+
+        Assert.IsType<NoContentResult>(result);
+        Assert.False(await context.ActivityTypes.AnyAsync(item => item.Id == activityType.Id));
+    }
+
     private static SportsCenterDbContext CreateContext()
     {
         var options = new DbContextOptionsBuilder<SportsCenterDbContext>()

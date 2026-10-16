@@ -43,4 +43,50 @@ public class ActivityTypesController : ControllerBase
 
         return CreatedAtAction(nameof(Get), new { id = activityType.Id }, activityType);
     }
+
+    /// <summary>
+    /// Updates an existing activity type.
+    /// </summary>
+    /// <param name="id">The identifier of the activity type to update.</param>
+    /// <param name="activityType">The updated activity type data.</param>
+    /// <returns>An HTTP response indicating whether the update succeeded.</returns>
+    [HttpPut("{id}")]
+    public async Task<IActionResult> Put(int id, ActivityType activityType)
+    {
+        if (id != activityType.Id)
+        {
+            return BadRequest();
+        }
+
+        var existingActivityType = await _context.ActivityTypes.FindAsync(id);
+        if (existingActivityType is null)
+        {
+            return NotFound();
+        }
+
+        existingActivityType.Name = activityType.Name;
+        await _context.SaveChangesAsync();
+
+        return NoContent();
+    }
+
+    /// <summary>
+    /// Deletes an existing activity type.
+    /// </summary>
+    /// <param name="id">The identifier of the activity type to delete.</param>
+    /// <returns>An HTTP response indicating whether the deletion succeeded.</returns>
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> Delete(int id)
+    {
+        var activityType = await _context.ActivityTypes.FindAsync(id);
+        if (activityType is null)
+        {
+            return NotFound();
+        }
+
+        _context.ActivityTypes.Remove(activityType);
+        await _context.SaveChangesAsync();
+
+        return NoContent();
+    }
 }
