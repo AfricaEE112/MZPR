@@ -9,5 +9,9 @@ namespace SportsCenter.Api.Models
         public ActivityType? ActivityType { get; set; } // Навігаційна властивість
         public string TrainerName { get; set; } = string.Empty;
         public string Room { get; set; } = string.Empty;
+public int Capacity { get; set; }
+public int MaxCapacity { get; set; }
+public ICollection<Registration> Registrations { get; set; } = new List<Registration>();
+    
     }
 }
