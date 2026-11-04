@@ -8,17 +8,8 @@ namespace SportsCenter.Api.Controllers;
 /// <summary>Provides endpoints for creating and retrieving class registrations.</summary>
 [ApiController]
 [Route("[controller]")]
-public class RegistrationController : ControllerBase
+public class RegistrationController(SportsCenterDbContext context) : ControllerBase
 {
-    private readonly SportsCenterDbContext _context;
-
-    /// <summary>Initializes a new instance of the <see cref="RegistrationController"/> class.</summary>
-    /// <param name="context">The database context used to access class sessions and registrations.</param>
-    public RegistrationController(SportsCenterDbContext context)
-    {
-        _context = context;
-    }
-
     /// <summary>Creates a confirmed registration if the requested class session has available capacity.</summary>
     /// <param name="registration">The registration details, including the class session and visitor.</param>
     /// <returns>The created registration, or an error describing why it could not be created.</returns>
@@ -28,7 +19,7 @@ public class RegistrationController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> Post(Registration registration)
     {
-        var classSession = await _context.ClassSessions
+        var classSession = await context.ClassSessions
             .FindAsync(registration.ClassSessionId);
 
         if (classSession is null)
@@ -36,18 +27,18 @@ public class RegistrationController : ControllerBase
             return NotFound("Class session not found.");
         }
 
-        var registrationCount = await _context.Registrations
+        var registrationCount = await context.Registrations
             .CountAsync(item => item.ClassSessionId == registration.ClassSessionId);
 
         // Reject the registration when existing registrations have filled the session capacity.
-        if (registrationCount >= classSession.MaxCapacity)
+        if (registrationCount >= classSession.Capacity)
         {
             return BadRequest("Class is full.");
         }
 
         registration.Status = "Confirmed";
-        _context.Registrations.Add(registration);
-        await _context.SaveChangesAsync();
+        context.Registrations.Add(registration);
+        await context.SaveChangesAsync();
 
         return Ok(registration);
     }
@@ -59,7 +50,7 @@ public class RegistrationController : ControllerBase
     [HttpGet("{visitorName}")]
     public async Task<IActionResult> Get(string visitorName)
     {
-        var registrations = await _context.Registrations
+        var registrations = await context.Registrations
             .Where(item => item.VisitorName == visitorName)
             .ToListAsync();
 

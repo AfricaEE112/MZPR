@@ -3,6 +3,8 @@ using Microsoft.EntityFrameworkCore;
 using SportsCenter.Api.Controllers;
 using SportsCenter.Api.Data;
 using SportsCenter.Api.Models;
+using ClassSession = SportsCenter.Api.Models.ClassSession;
+using Registration = SportsCenter.Api.Models.Registration;
 
 namespace SportsCenter.Tests;
 
@@ -112,7 +114,9 @@ public class RegistrationControllerTests
 
         var okResult = Assert.IsType<OkObjectResult>(result);
         var registrations = Assert.IsAssignableFrom<IEnumerable<Registration>>(okResult.Value);
-        Assert.Equal(new[] { 1, 2 }, registrations.Select(item => item.Id).OrderBy(id => id));
+        Assert.Equal(2, registrations.Count());
+        Assert.Contains(registrations, item => item.Id == 1);
+        Assert.Contains(registrations, item => item.Id == 2);
         Assert.All(registrations, item => Assert.Equal("Alex", item.VisitorName));
     }
 

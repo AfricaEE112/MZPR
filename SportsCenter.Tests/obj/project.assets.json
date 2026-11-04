@@ -6550,11 +6550,16 @@
     ]
   },
   "packageFolders": {
+<<<<<<< HEAD
     "C:\\Users\\user\\.nuget\\packages\\": {}
+=======
+    "C:\\Users\\Yaroslav\\.nuget\\packages\\": {}
+>>>>>>> b200ddf2694c8a70a3d114178872c9332831f60c
   },
   "project": {
     "version": "1.0.0",
     "restore": {
+<<<<<<< HEAD
       "projectUniqueName": "E:\\BANANAproject\\MZPR\\SportsCenter.Tests\\SportsCenter.Tests.csproj",
       "projectName": "SportsCenter.Tests",
       "projectPath": "E:\\BANANAproject\\MZPR\\SportsCenter.Tests\\SportsCenter.Tests.csproj",
@@ -6563,6 +6568,16 @@
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\user\\AppData\\Roaming\\NuGet\\NuGet.Config"
+=======
+      "projectUniqueName": "C:\\Users\\Yaroslav\\Desktop\\Education\\mrpz\\2\\MZPR\\SportsCenter.Tests\\SportsCenter.Tests.csproj",
+      "projectName": "SportsCenter.Tests",
+      "projectPath": "C:\\Users\\Yaroslav\\Desktop\\Education\\mrpz\\2\\MZPR\\SportsCenter.Tests\\SportsCenter.Tests.csproj",
+      "packagesPath": "C:\\Users\\Yaroslav\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\Yaroslav\\Desktop\\Education\\mrpz\\2\\MZPR\\SportsCenter.Tests\\obj\\",
+      "projectStyle": "PackageReference",
+      "configFilePaths": [
+        "C:\\Users\\Yaroslav\\AppData\\Roaming\\NuGet\\NuGet.Config"
+>>>>>>> b200ddf2694c8a70a3d114178872c9332831f60c
       ],
       "originalTargetFrameworks": [
         "net8.0"
@@ -6575,8 +6590,13 @@
           "framework": "net8.0",
           "targetAlias": "net8.0",
           "projectReferences": {
+<<<<<<< HEAD
             "E:\\BANANAproject\\MZPR\\SportsCenter.Api\\SportsCenter.Api.csproj": {
               "projectPath": "E:\\BANANAproject\\MZPR\\SportsCenter.Api\\SportsCenter.Api.csproj"
+=======
+            "C:\\Users\\Yaroslav\\Desktop\\Education\\mrpz\\2\\MZPR\\SportsCenter.Api\\SportsCenter.Api.csproj": {
+              "projectPath": "C:\\Users\\Yaroslav\\Desktop\\Education\\mrpz\\2\\MZPR\\SportsCenter.Api\\SportsCenter.Api.csproj"
+>>>>>>> b200ddf2694c8a70a3d114178872c9332831f60c
             }
           }
         }
