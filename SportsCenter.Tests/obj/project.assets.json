@@ -1,5 +1,5 @@
 {
-  "version": 3,
+  "version": 4,
   "targets": {
     "net8.0": {
       "coverlet.collector/6.0.0": {
@@ -6550,33 +6550,33 @@
     ]
   },
   "packageFolders": {
-    "/home/user/.nuget/packages/": {}
+    "C:\\Users\\Yaroslav\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/home/user/SportsCenterSystem/SportsCenter.Tests/SportsCenter.Tests.csproj",
+      "projectUniqueName": "C:\\Users\\Yaroslav\\Desktop\\Education\\mrpz\\2\\MZPR\\SportsCenter.Tests\\SportsCenter.Tests.csproj",
       "projectName": "SportsCenter.Tests",
-      "projectPath": "/home/user/SportsCenterSystem/SportsCenter.Tests/SportsCenter.Tests.csproj",
-      "packagesPath": "/home/user/.nuget/packages/",
-      "outputPath": "/home/user/SportsCenterSystem/SportsCenter.Tests/obj/",
+      "projectPath": "C:\\Users\\Yaroslav\\Desktop\\Education\\mrpz\\2\\MZPR\\SportsCenter.Tests\\SportsCenter.Tests.csproj",
+      "packagesPath": "C:\\Users\\Yaroslav\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\Yaroslav\\Desktop\\Education\\mrpz\\2\\MZPR\\SportsCenter.Tests\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "/home/user/.nuget/NuGet/NuGet.Config"
+        "C:\\Users\\Yaroslav\\AppData\\Roaming\\NuGet\\NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "net8.0"
       ],
       "sources": {
-        "/usr/lib/dotnet/library-packs": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
         "net8.0": {
+          "framework": "net8.0",
           "targetAlias": "net8.0",
           "projectReferences": {
-            "/home/user/SportsCenterSystem/SportsCenter.Api/SportsCenter.Api.csproj": {
-              "projectPath": "/home/user/SportsCenterSystem/SportsCenter.Api/SportsCenter.Api.csproj"
+            "C:\\Users\\Yaroslav\\Desktop\\Education\\mrpz\\2\\MZPR\\SportsCenter.Api\\SportsCenter.Api.csproj": {
+              "projectPath": "C:\\Users\\Yaroslav\\Desktop\\Education\\mrpz\\2\\MZPR\\SportsCenter.Api\\SportsCenter.Api.csproj"
             }
           }
         }
@@ -6591,10 +6591,11 @@
         "auditLevel": "low",
         "auditMode": "direct"
       },
-      "SdkAnalysisLevel": "10.0.100"
+      "SdkAnalysisLevel": "10.0.400"
     },
     "frameworks": {
       "net8.0": {
+        "framework": "net8.0",
         "targetAlias": "net8.0",
         "dependencies": {
           "Microsoft.NET.Test.Sdk": {
@@ -6634,7 +6635,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "/usr/lib/dotnet/sdk/10.0.112/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.402/PortableRuntimeIdentifierGraph.json"
       }
     }
   }
