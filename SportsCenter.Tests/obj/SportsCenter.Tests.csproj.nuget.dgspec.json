@@ -1,6 +1,22 @@
 {
   "format": 1,
   "restore": {
+<<<<<<< HEAD
+    "E:\\BANANAproject\\MZPR\\SportsCenter.Tests\\SportsCenter.Tests.csproj": {}
+  },
+  "projects": {
+    "E:\\BANANAproject\\MZPR\\SportsCenter.Api\\SportsCenter.Api.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "E:\\BANANAproject\\MZPR\\SportsCenter.Api\\SportsCenter.Api.csproj",
+        "projectName": "SportsCenter.Api",
+        "projectPath": "E:\\BANANAproject\\MZPR\\SportsCenter.Api\\SportsCenter.Api.csproj",
+        "packagesPath": "C:\\Users\\user\\.nuget\\packages\\",
+        "outputPath": "E:\\BANANAproject\\MZPR\\SportsCenter.Api\\obj\\",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "C:\\Users\\user\\AppData\\Roaming\\NuGet\\NuGet.Config"
+=======
     "C:\\Users\\Yaroslav\\Desktop\\Education\\mrpz\\2\\MZPR\\SportsCenter.Tests\\SportsCenter.Tests.csproj": {}
   },
   "projects": {
@@ -15,6 +31,7 @@
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\Yaroslav\\AppData\\Roaming\\NuGet\\NuGet.Config"
+>>>>>>> b200ddf2694c8a70a3d114178872c9332831f60c
         ],
         "originalTargetFrameworks": [
           "net8.0"
@@ -66,6 +83,27 @@
           ],
           "assetTargetFallback": true,
           "warn": true,
+<<<<<<< HEAD
+          "downloadDependencies": [
+            {
+              "name": "Microsoft.AspNetCore.App.Ref",
+              "version": "[8.0.32, 8.0.32]"
+            },
+            {
+              "name": "Microsoft.NETCore.App.Host.win-x64",
+              "version": "[8.0.32, 8.0.32]"
+            },
+            {
+              "name": "Microsoft.NETCore.App.Ref",
+              "version": "[8.0.32, 8.0.32]"
+            },
+            {
+              "name": "Microsoft.WindowsDesktop.App.Ref",
+              "version": "[8.0.32, 8.0.32]"
+            }
+          ],
+=======
+>>>>>>> b200ddf2694c8a70a3d114178872c9332831f60c
           "frameworkReferences": {
             "Microsoft.AspNetCore.App": {
               "privateAssets": "none"
@@ -78,6 +116,19 @@
         }
       }
     },
+<<<<<<< HEAD
+    "E:\\BANANAproject\\MZPR\\SportsCenter.Tests\\SportsCenter.Tests.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "E:\\BANANAproject\\MZPR\\SportsCenter.Tests\\SportsCenter.Tests.csproj",
+        "projectName": "SportsCenter.Tests",
+        "projectPath": "E:\\BANANAproject\\MZPR\\SportsCenter.Tests\\SportsCenter.Tests.csproj",
+        "packagesPath": "C:\\Users\\user\\.nuget\\packages\\",
+        "outputPath": "E:\\BANANAproject\\MZPR\\SportsCenter.Tests\\obj\\",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "C:\\Users\\user\\AppData\\Roaming\\NuGet\\NuGet.Config"
+=======
     "C:\\Users\\Yaroslav\\Desktop\\Education\\mrpz\\2\\MZPR\\SportsCenter.Tests\\SportsCenter.Tests.csproj": {
       "version": "1.0.0",
       "restore": {
@@ -89,6 +140,7 @@
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\Yaroslav\\AppData\\Roaming\\NuGet\\NuGet.Config"
+>>>>>>> b200ddf2694c8a70a3d114178872c9332831f60c
         ],
         "originalTargetFrameworks": [
           "net8.0"
@@ -101,8 +153,13 @@
             "framework": "net8.0",
             "targetAlias": "net8.0",
             "projectReferences": {
+<<<<<<< HEAD
+              "E:\\BANANAproject\\MZPR\\SportsCenter.Api\\SportsCenter.Api.csproj": {
+                "projectPath": "E:\\BANANAproject\\MZPR\\SportsCenter.Api\\SportsCenter.Api.csproj"
+=======
               "C:\\Users\\Yaroslav\\Desktop\\Education\\mrpz\\2\\MZPR\\SportsCenter.Api\\SportsCenter.Api.csproj": {
                 "projectPath": "C:\\Users\\Yaroslav\\Desktop\\Education\\mrpz\\2\\MZPR\\SportsCenter.Api\\SportsCenter.Api.csproj"
+>>>>>>> b200ddf2694c8a70a3d114178872c9332831f60c
               }
             }
           }
@@ -156,6 +213,20 @@
           ],
           "assetTargetFallback": true,
           "warn": true,
+          "downloadDependencies": [
+            {
+              "name": "Microsoft.AspNetCore.App.Ref",
+              "version": "[8.0.32, 8.0.32]"
+            },
+            {
+              "name": "Microsoft.NETCore.App.Ref",
+              "version": "[8.0.32, 8.0.32]"
+            },
+            {
+              "name": "Microsoft.WindowsDesktop.App.Ref",
+              "version": "[8.0.32, 8.0.32]"
+            }
+          ],
           "frameworkReferences": {
             "Microsoft.NETCore.App": {
               "privateAssets": "all"

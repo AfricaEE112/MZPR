@@ -1024,11 +1024,25 @@
     ]
   },
   "packageFolders": {
+<<<<<<< HEAD
+    "C:\\Users\\user\\.nuget\\packages\\": {}
+=======
     "C:\\Users\\Yaroslav\\.nuget\\packages\\": {}
+>>>>>>> b200ddf2694c8a70a3d114178872c9332831f60c
   },
   "project": {
     "version": "1.0.0",
     "restore": {
+<<<<<<< HEAD
+      "projectUniqueName": "E:\\BANANAproject\\MZPR\\SportsCenter.Api\\SportsCenter.Api.csproj",
+      "projectName": "SportsCenter.Api",
+      "projectPath": "E:\\BANANAproject\\MZPR\\SportsCenter.Api\\SportsCenter.Api.csproj",
+      "packagesPath": "C:\\Users\\user\\.nuget\\packages\\",
+      "outputPath": "E:\\BANANAproject\\MZPR\\SportsCenter.Api\\obj\\",
+      "projectStyle": "PackageReference",
+      "configFilePaths": [
+        "C:\\Users\\user\\AppData\\Roaming\\NuGet\\NuGet.Config"
+=======
       "projectUniqueName": "C:\\Users\\Yaroslav\\Desktop\\Education\\mrpz\\2\\MZPR\\SportsCenter.Api\\SportsCenter.Api.csproj",
       "projectName": "SportsCenter.Api",
       "projectPath": "C:\\Users\\Yaroslav\\Desktop\\Education\\mrpz\\2\\MZPR\\SportsCenter.Api\\SportsCenter.Api.csproj",
@@ -1037,6 +1051,7 @@
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\Yaroslav\\AppData\\Roaming\\NuGet\\NuGet.Config"
+>>>>>>> b200ddf2694c8a70a3d114178872c9332831f60c
       ],
       "originalTargetFrameworks": [
         "net8.0"
@@ -1088,6 +1103,27 @@
         ],
         "assetTargetFallback": true,
         "warn": true,
+<<<<<<< HEAD
+        "downloadDependencies": [
+          {
+            "name": "Microsoft.AspNetCore.App.Ref",
+            "version": "[8.0.32, 8.0.32]"
+          },
+          {
+            "name": "Microsoft.NETCore.App.Host.win-x64",
+            "version": "[8.0.32, 8.0.32]"
+          },
+          {
+            "name": "Microsoft.NETCore.App.Ref",
+            "version": "[8.0.32, 8.0.32]"
+          },
+          {
+            "name": "Microsoft.WindowsDesktop.App.Ref",
+            "version": "[8.0.32, 8.0.32]"
+          }
+        ],
+=======
+>>>>>>> b200ddf2694c8a70a3d114178872c9332831f60c
         "frameworkReferences": {
           "Microsoft.AspNetCore.App": {
             "privateAssets": "none"
