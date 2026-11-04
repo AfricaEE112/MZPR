@@ -1,8 +1,13 @@
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SportsCenter.Api;
 using SportsCenter.Api.Controllers;
 using SportsCenter.Api.Data;
+using SportsCenter.Api.Models;
+using Xunit;
 
 namespace SportsCenter.Tests;
 
