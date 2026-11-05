@@ -14,7 +14,7 @@ public class RegistrationControllerTests
     public async Task Post_ReturnsOk_WhenCapacityIsAvailable()
     {
         using var context = CreateContext();
-        var classSession = new ClassSession { Id = 1, MaxCapacity = 2 };
+var classSession = new ClassSession { Id = 1, Capacity = 2, MaxCapacity = 2 };
         context.ClassSessions.Add(classSession);
         context.Registrations.Add(new Registration
         {
