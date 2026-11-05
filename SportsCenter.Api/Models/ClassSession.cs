@@ -12,6 +12,7 @@ namespace SportsCenter.Api.Models
 public int Capacity { get; set; }
 public int MaxCapacity { get; set; }
 public ICollection<Registration> Registrations { get; set; } = new List<Registration>();
+    public string Status { get; set; } = "Заплановано";
     
     }
 }

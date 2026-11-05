@@ -9,4 +9,5 @@ public class SportsCenterDbContext(DbContextOptions<SportsCenterDbContext> optio
     public DbSet<ActivityType> ActivityTypes { get; set; } = null!;
     public DbSet<Registration> Registrations { get; set; } = null!;
     public DbSet<ClassSession> ClassSessions { get; set; } = null!;
+    public DbSet<Attendance> Attendances { get; set; } = null!;
 }
