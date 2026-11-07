@@ -8,8 +8,10 @@ using Registration = SportsCenter.Api.Models.Registration;
 
 namespace SportsCenter.Tests;
 
+/// <summary>Містить тести створення та перегляду реєстрацій відвідувачів.</summary>
 public class RegistrationControllerTests
 {
+    /// <summary>Перевіряє, що реєстрація створюється, коли місткість заняття не вичерпана.</summary>
     [Fact]
     public async Task Post_ReturnsOk_WhenCapacityIsAvailable()
     {
@@ -44,6 +46,7 @@ var classSession = new ClassSession { Id = 1, Capacity = 2, MaxCapacity = 2 };
         Assert.Equal("Confirmed", savedRegistration.Status);
     }
 
+    /// <summary>Перевіряє, що запит відхиляється, коли реєстрація перевищить місткість заняття.</summary>
     [Fact]
     public async Task Post_ReturnsBadRequest_WhenCapacityIsExceeded()
     {
@@ -77,6 +80,7 @@ var classSession = new ClassSession { Id = 1, Capacity = 2, MaxCapacity = 2 };
             $"Expected a capacity-related error message, but got: {errorMessage}");
     }
 
+    /// <summary>Перевіряє, що запит повертає реєстрації лише зазначеного відвідувача.</summary>
     [Fact]
     public async Task Get_ReturnsUserRegistrations()
     {
@@ -120,6 +124,8 @@ var classSession = new ClassSession { Id = 1, Capacity = 2, MaxCapacity = 2 };
         Assert.All(registrations, item => Assert.Equal("Alex", item.VisitorName));
     }
 
+    /// <summary>Створює контекст бази даних у пам'яті з унікальною назвою для ізоляції тесту.</summary>
+    /// <returns>Контекст бази даних для тесту.</returns>
     private static SportsCenterDbContext CreateContext()
     {
         var options = new DbContextOptionsBuilder<SportsCenterDbContext>()

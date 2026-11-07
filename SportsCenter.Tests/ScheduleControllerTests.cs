@@ -6,8 +6,11 @@ using SportsCenter.Api.Models;
 
 namespace SportsCenter.Tests
 {
+    /// <summary>Містить тести перевірок доступності аудиторій і тренерів у розкладі.</summary>
     public class ScheduleControllerTests
     {
+        /// <summary>Створює параметри контексту бази даних у пам'яті з унікальною назвою.</summary>
+        /// <returns>Параметри для створення ізольованого тестового контексту.</returns>
         private DbContextOptions<SportsCenterDbContext> CreateNewContextOptions()
         {
             return new DbContextOptionsBuilder<SportsCenterDbContext>()
@@ -15,6 +18,7 @@ namespace SportsCenter.Tests
                 .Options;
         }
 
+        /// <summary>Перевіряє, що заняття не додається до зайнятої аудиторії.</summary>
         [Fact]
         public async Task Post_ReturnsBadRequest_WhenRoomIsOccupied()
         {
@@ -34,6 +38,7 @@ namespace SportsCenter.Tests
             Assert.Equal("Аудиторія вже зайнята на цей час.", badRequestResult.Value);
         }
 
+        /// <summary>Перевіряє, що заняття не додається, якщо тренер уже зайнятий.</summary>
         [Fact]
         public async Task Post_ReturnsBadRequest_WhenTrainerIsBusy()
         {

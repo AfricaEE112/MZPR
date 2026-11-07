@@ -5,60 +5,57 @@ using SportsCenter.Api.Models;
 
 namespace SportsCenter.Api.Controllers;
 
+/// <summary>
+/// Надає кінцеві точки для керування заняттями, відвідуваністю та звітами.
+/// </summary>
 [ApiController]
 [Route("[controller]")]
-/// <summary>
-/// Provides endpoints for managing class sessions, attendance, and session reports.
-/// </summary>
 public class ClassSessionController : ControllerBase
 {
 	private readonly SportsCenterDbContext _context;
 
-	/// <summary>
-	/// Initializes a new instance of the <see cref="ClassSessionController"/> class.
-	/// </summary>
-	/// <param name="context">The database context used to access class sessions and attendance records.</param>
+	/// <summary>Створює екземпляр контролера занять.</summary>
+	/// <param name="context">Контекст бази даних для доступу до занять і записів відвідуваності.</param>
 	public ClassSessionController(SportsCenterDbContext context)
 	{
 		_context = context;
 	}
 
-	// SCRUM-27
-	/// <summary>
-	/// Cancels the specified class session.
-	/// </summary>
-	/// <param name="id">The identifier of the class session to cancel.</param>
-	/// <returns>An action result indicating whether the session was canceled.</returns>
-	/// <response code="200">The session was canceled.</response>
-	/// <response code="404">No session with the specified identifier was found.</response>
+	// Реалізація вимоги SCRUM-27.
+	/// <summary>Скасовує заняття із зазначеним ідентифікатором.</summary>
+	/// <param name="id">Ідентифікатор заняття, яке потрібно скасувати.</param>
+	/// <returns>Результат операції скасування заняття.</returns>
+	/// <response code="200">Заняття успішно скасовано.</response>
+	/// <response code="404">Заняття із зазначеним ідентифікатором не знайдено.</response>
 	[HttpPut("{id}/cancel")]
 	public async Task<IActionResult> Cancel(int id)
 	{
+		// Знаходимо заняття; відсутній запис не можна позначити скасованим.
 		var session = await _context.ClassSessions.FindAsync(id);
 		if (session is null)
 		{
 			return NotFound();
 		}
 
+		// Зміна статусу зберігає заняття в розкладі, але позначає його скасованим.
 		session.Status = "Скасовано";
 		await _context.SaveChangesAsync();
 		return Ok();
 	}
 
-	// SCRUM-28
-	/// <summary>
-	/// Records an attendee's attendance for a class session.
-	/// </summary>
-	/// <param name="classSessionId">The identifier of the class session.</param>
-	/// <param name="request">The registration identifier and whether the attendee was present.</param>
-	/// <returns>An action result indicating that the attendance record was saved.</returns>
-	/// <response code="200">The attendance record was saved.</response>
-	/// <response code="400">The request body is missing or invalid.</response>
+	// Реалізація вимоги SCRUM-28.
+	/// <summary>Зберігає відомості про присутність учасника на занятті.</summary>
+	/// <param name="classSessionId">Ідентифікатор заняття.</param>
+	/// <param name="request">Ідентифікатор реєстрації та ознака присутності учасника.</param>
+	/// <returns>Результат збереження запису про відвідуваність.</returns>
+	/// <response code="200">Запис про відвідуваність збережено.</response>
+	/// <response code="400">Тіло запиту відсутнє або не пройшло перевірку моделі.</response>
 	[HttpPost("{classSessionId}/attendance")]
 	public async Task<IActionResult> RecordAttendance(
 		int classSessionId,
 		[FromBody] RecordAttendanceRequest request)
 	{
+		// Пов'язуємо відвідуваність із заняттям і реєстрацією, переданими в запиті.
 		var attendance = new Attendance
 		{
 			ClassSessionId = classSessionId,
@@ -71,28 +68,29 @@ public class ClassSessionController : ControllerBase
 		return Ok();
 	}
 
-	// SCRUM-28
-	/// <summary>
-	/// Gets aggregate session capacity and attendance for the specified date range.
-	/// </summary>
-	/// <param name="startDate">The inclusive start of the date range.</param>
-	/// <param name="endDate">The inclusive end of the date range.</param>
-	/// <returns>A report containing the date range, session count, total capacity, and actual attendee count.</returns>
-	/// <response code="200">The report was generated.</response>
-	/// <response code="400">The start date is later than the end date.</response>
+	// Реалізація вимоги SCRUM-28.
+	/// <summary>Формує зведений звіт про місткість і відвідуваність занять за період.</summary>
+	/// <param name="startDate">Початок періоду включно.</param>
+	/// <param name="endDate">Кінець періоду включно.</param>
+	/// <returns>Звіт із межами періоду, кількістю занять, загальною місткістю та кількістю присутніх.</returns>
+	/// <response code="200">Звіт успішно сформовано.</response>
+	/// <response code="400">Дата початку пізніша за дату завершення.</response>
 	[HttpGet("report")]
 	public async Task<IActionResult> GetReport(
 		[FromQuery] DateTime startDate,
 		[FromQuery] DateTime endDate)
 	{
+		// Відхиляємо некоректний період до виконання запитів до бази даних.
 		if (startDate > endDate)
 		{
 			return BadRequest("startDate must be earlier than or equal to endDate.");
 		}
 
+		// Обмежуємо звіт заняттями, дата яких потрапляє в заданий включний діапазон.
 		var sessions = _context.ClassSessions
 			.Where(session => session.Date >= startDate && session.Date <= endDate);
 
+		// Обчислюємо кількість занять, сумарну місткість і число присутніх учасників.
 		var totalSessions = await sessions.CountAsync();
 		var totalCapacity = await sessions.SumAsync(session => (int?)session.Capacity) ?? 0;
 		var sessionIds = sessions.Select(session => session.Id);
@@ -109,15 +107,13 @@ public class ClassSessionController : ControllerBase
 		});
 	}
 
-	/// <summary>
-	/// Specifies the attendance details to record for a class session.
-	/// </summary>
+	/// <summary>Містить дані про відвідуваність, які потрібно зберегти для заняття.</summary>
 	public sealed class RecordAttendanceRequest
 	{
-		/// <summary>Gets or sets the identifier of the attendee's registration.</summary>
+		/// <summary>Отримує або задає ідентифікатор реєстрації учасника.</summary>
 		public int RegistrationId { get; set; }
 
-		/// <summary>Gets or sets whether the attendee was present.</summary>
+		/// <summary>Отримує або задає ознаку присутності учасника.</summary>
 		public bool IsPresent { get; set; }
 	}
 }

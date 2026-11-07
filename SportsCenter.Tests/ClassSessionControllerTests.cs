@@ -7,8 +7,11 @@ using Xunit;
 
 namespace SportsCenter.Tests;
 
+/// <summary>Містить тести кінцевих точок керування заняттями та відвідуваністю.</summary>
 public class ClassSessionControllerTests
 {
+	/// <summary>Створює контекст бази даних у пам'яті з унікальною назвою для ізоляції тесту.</summary>
+	/// <returns>Контекст бази даних для тесту.</returns>
 	private static SportsCenterDbContext CreateContext()
 	{
 		var options = new DbContextOptionsBuilder<SportsCenterDbContext>()
@@ -18,6 +21,7 @@ public class ClassSessionControllerTests
 		return new SportsCenterDbContext(options);
 	}
 
+	/// <summary>Перевіряє, що скасування заняття змінює його стан на «Скасовано».</summary>
 	[Fact]
 	public async Task CancelSession_ChangesStatusToCanceled()
 	{
@@ -35,6 +39,7 @@ public class ClassSessionControllerTests
 		Assert.Equal("Скасовано", updatedSession.Status);
 	}
 
+	/// <summary>Перевіряє, що запис про присутність створюється з переданими даними.</summary>
 	[Fact]
 	public async Task MarkAttendance_CreatesAttendanceRecord()
 	{

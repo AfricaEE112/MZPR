@@ -11,15 +11,10 @@ using Xunit;
 
 namespace SportsCenter.Tests;
 
-/// <summary>
-/// Contains tests for the <see cref="ActivityTypesController"/>.
-/// </summary>
+/// <summary>Містить тести для <see cref="ActivityTypesController"/>.</summary>
 public class ActivityTypesControllerTests
 {
-    /// <summary>
-    /// Verifies that <see cref="ActivityTypesController.Get"/> returns an OK result
-    /// containing a list of activity types.
-    /// </summary>
+    /// <summary>Перевіряє, що <see cref="ActivityTypesController.Get"/> повертає успішну відповідь зі списком типів занять.</summary>
     [Fact]
     public async Task Get_ReturnsOkResult_WithListOfActivityTypes()
     {
@@ -32,6 +27,7 @@ public class ActivityTypesControllerTests
         Assert.IsAssignableFrom<IEnumerable<ActivityType>>(okResult.Value);
     }
 
+    /// <summary>Перевіряє, що створення коректного типу заняття повертає відповідь із результатом створення.</summary>
     [Fact]
     public async Task Post_ReturnsCreatedAtActionResult_WhenGivenValidActivityType()
     {
@@ -45,6 +41,7 @@ public class ActivityTypesControllerTests
         Assert.Same(activityType, createdAtActionResult.Value);
     }
 
+    /// <summary>Перевіряє, що успішне оновлення типу заняття повертає відповідь без вмісту.</summary>
     [Fact]
     public async Task Put_ReturnsNoContent_WhenUpdateIsSuccessful()
     {
@@ -61,6 +58,7 @@ public class ActivityTypesControllerTests
         Assert.IsType<NoContentResult>(result);
     }
 
+    /// <summary>Перевіряє, що успішне видалення типу заняття прибирає запис із бази даних.</summary>
     [Fact]
     public async Task Delete_ReturnsNoContent_WhenDeleteIsSuccessful()
     {
@@ -77,6 +75,8 @@ public class ActivityTypesControllerTests
         Assert.False(await context.ActivityTypes.AnyAsync(item => item.Id == activityType.Id));
     }
 
+    /// <summary>Створює контекст бази даних у пам'яті з унікальною назвою для ізоляції тесту.</summary>
+    /// <returns>Контекст бази даних для тесту.</returns>
     private static SportsCenterDbContext CreateContext()
     {
         var options = new DbContextOptionsBuilder<SportsCenterDbContext>()
