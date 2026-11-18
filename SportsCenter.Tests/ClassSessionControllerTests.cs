@@ -26,7 +26,7 @@ public class ClassSessionControllerTests
 	public async Task CancelSession_ChangesStatusToCanceled()
 	{
 		await using var context = CreateContext();
-		var session = new ClassSession { Status = "Заплановано" };
+		var session = new ClassSession { Status = SessionStatus.Scheduled };
 		context.ClassSessions.Add(session);
 		await context.SaveChangesAsync();
 
@@ -36,7 +36,7 @@ public class ClassSessionControllerTests
 		Assert.IsType<OkResult>(result);
 		var updatedSession = await context.ClassSessions.FindAsync(session.Id);
 		Assert.NotNull(updatedSession);
-		Assert.Equal("Скасовано", updatedSession.Status);
+		Assert.Equal(SessionStatus.Cancelled, updatedSession.Status);
 	}
 
 	/// <summary>Перевіряє, що запис про присутність створюється з переданими даними.</summary>
@@ -44,7 +44,7 @@ public class ClassSessionControllerTests
 	public async Task MarkAttendance_CreatesAttendanceRecord()
 	{
 		await using var context = CreateContext();
-		var session = new ClassSession { Status = "Заплановано" };
+		var session = new ClassSession { Status = SessionStatus.Scheduled };
 		context.ClassSessions.Add(session);
 		await context.SaveChangesAsync();
 
@@ -53,12 +53,14 @@ public class ClassSessionControllerTests
 		await context.SaveChangesAsync();
 
 		var controller = new ClassSessionController(context);
-		var request = new ClassSessionController.RecordAttendanceRequest 
-{ 
-    RegistrationId = registration.Id, 
-    IsPresent = true 
-};
-var result = await controller.RecordAttendance(session.Id, request);
+		var request = new ClassSessionController.RecordAttendanceRequest
+		{
+			RegistrationId = registration.Id,
+			IsPresent = true
+		};
+
+		var result = await controller.RecordAttendance(session.Id, request);
+
 		Assert.IsType<OkResult>(result);
 		var attendance = await context.Attendances
 			.SingleOrDefaultAsync(a => a.RegistrationId == registration.Id);

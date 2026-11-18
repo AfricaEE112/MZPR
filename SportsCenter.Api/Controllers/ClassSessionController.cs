@@ -9,7 +9,7 @@ namespace SportsCenter.Api.Controllers;
 /// Надає кінцеві точки для керування заняттями, відвідуваністю та звітами.
 /// </summary>
 [ApiController]
-[Route("[controller]")]
+[Route("api/[controller]")]
 public class ClassSessionController : ControllerBase
 {
 	private readonly SportsCenterDbContext _context;
@@ -38,7 +38,7 @@ public class ClassSessionController : ControllerBase
 		}
 
 		// Зміна статусу зберігає заняття в розкладі, але позначає його скасованим.
-		session.Status = "Скасовано";
+		session.Status = SessionStatus.Cancelled;
 		await _context.SaveChangesAsync();
 		return Ok();
 	}

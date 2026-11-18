@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SportsCenter.Api.Data;
+using SportsCenter.Api.Models;
 
 namespace SportsCenter.Api.Controllers;
 
@@ -8,7 +9,7 @@ namespace SportsCenter.Api.Controllers;
 /// Надає кінцеві точки для перегляду та керування типами занять.
 /// </summary>
 [ApiController]
-[Route("[controller]")]
+[Route("api/[controller]")]
 public class ActivityTypesController : ControllerBase
 {
     private readonly SportsCenterDbContext _context;
@@ -77,8 +78,10 @@ public class ActivityTypesController : ControllerBase
             return NotFound();
         }
 
-        // Змінюємо назву знайденого типу та зберігаємо оновлення.
+        // Переносимо нові значення на знайдений запис і зберігаємо оновлення.
         existingActivityType.Name = activityType.Name;
+        existingActivityType.DurationMinutes = activityType.DurationMinutes;
+        existingActivityType.MaxParticipants = activityType.MaxParticipants;
         await _context.SaveChangesAsync();
 
         return NoContent();

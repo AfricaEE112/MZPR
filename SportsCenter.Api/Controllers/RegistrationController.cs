@@ -7,7 +7,7 @@ namespace SportsCenter.Api.Controllers;
 
 /// <summary>Надає кінцеві точки для створення та перегляду реєстрацій на заняття.</summary>
 [ApiController]
-[Route("[controller]")]
+[Route("api/[controller]")]
 public class RegistrationController(SportsCenterDbContext context) : ControllerBase
 {
     /// <summary>Створює підтверджену реєстрацію, якщо в занятті є вільні місця.</summary>
@@ -39,7 +39,7 @@ public class RegistrationController(SportsCenterDbContext context) : ControllerB
         }
 
         // Підтверджуємо заявку та зберігаємо її після успішної перевірки місткості.
-        registration.Status = "Confirmed";
+        registration.Status = RegistrationStatus.Confirmed;
         context.Registrations.Add(registration);
         await context.SaveChangesAsync();
 

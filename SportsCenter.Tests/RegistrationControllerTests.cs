@@ -16,14 +16,14 @@ public class RegistrationControllerTests
     public async Task Post_ReturnsOk_WhenCapacityIsAvailable()
     {
         using var context = CreateContext();
-var classSession = new ClassSession { Id = 1, Capacity = 2, MaxCapacity = 2 };
+        var classSession = new ClassSession { Id = 1, Capacity = 2 };
         context.ClassSessions.Add(classSession);
         context.Registrations.Add(new Registration
         {
             ClassSessionId = classSession.Id,
             VisitorName = "Existing visitor",
             RegistrationDate = DateTime.UtcNow,
-            Status = "Confirmed"
+            Status = RegistrationStatus.Confirmed
         });
         await context.SaveChangesAsync();
 
@@ -43,7 +43,7 @@ var classSession = new ClassSession { Id = 1, Capacity = 2, MaxCapacity = 2 };
 
         var savedRegistration = await context.Registrations
             .SingleAsync(item => item.VisitorName == registration.VisitorName);
-        Assert.Equal("Confirmed", savedRegistration.Status);
+        Assert.Equal(RegistrationStatus.Confirmed, savedRegistration.Status);
     }
 
     /// <summary>Перевіряє, що запит відхиляється, коли реєстрація перевищить місткість заняття.</summary>
@@ -51,14 +51,14 @@ var classSession = new ClassSession { Id = 1, Capacity = 2, MaxCapacity = 2 };
     public async Task Post_ReturnsBadRequest_WhenCapacityIsExceeded()
     {
         using var context = CreateContext();
-        var classSession = new ClassSession { Id = 1, MaxCapacity = 1 };
+        var classSession = new ClassSession { Id = 1, Capacity = 1 };
         context.ClassSessions.Add(classSession);
         context.Registrations.Add(new Registration
         {
             ClassSessionId = classSession.Id,
             VisitorName = "Existing visitor",
             RegistrationDate = DateTime.UtcNow,
-            Status = "Confirmed"
+            Status = RegistrationStatus.Confirmed
         });
         await context.SaveChangesAsync();
 
@@ -92,7 +92,7 @@ var classSession = new ClassSession { Id = 1, Capacity = 2, MaxCapacity = 2 };
                 ClassSessionId = 1,
                 VisitorName = "Alex",
                 RegistrationDate = DateTime.UtcNow,
-                Status = "Confirmed"
+                Status = RegistrationStatus.Confirmed
             },
             new Registration
             {
@@ -108,7 +108,7 @@ var classSession = new ClassSession { Id = 1, Capacity = 2, MaxCapacity = 2 };
                 ClassSessionId = 1,
                 VisitorName = "Jordan",
                 RegistrationDate = DateTime.UtcNow,
-                Status = "Confirmed"
+                Status = RegistrationStatus.Confirmed
             });
         await context.SaveChangesAsync();
 
