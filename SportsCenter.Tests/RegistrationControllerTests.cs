@@ -16,14 +16,14 @@ public class RegistrationControllerTests
     public async Task Post_ReturnsOk_WhenCapacityIsAvailable()
     {
         using var context = CreateContext();
-var classSession = new ClassSession { Id = 1, Capacity = 2, MaxCapacity = 2 };
+        var classSession = new ClassSession { Id = 1, Capacity = 2 };
         context.ClassSessions.Add(classSession);
         context.Registrations.Add(new Registration
         {
             ClassSessionId = classSession.Id,
             VisitorName = "Existing visitor",
             RegistrationDate = DateTime.UtcNow,
-            Status = "Confirmed"
+            Status = RegistrationStatus.Confirmed
         });
         await context.SaveChangesAsync();
 
@@ -43,7 +43,7 @@ var classSession = new ClassSession { Id = 1, Capacity = 2, MaxCapacity = 2 };
 
         var savedRegistration = await context.Registrations
             .SingleAsync(item => item.VisitorName == registration.VisitorName);
-        Assert.Equal("Confirmed", savedRegistration.Status);
+        Assert.Equal(RegistrationStatus.Confirmed, savedRegistration.Status);
     }
 
     /// <summary>Перевіряє, що запит відхиляється, коли реєстрація перевищить місткість заняття.</summary>
@@ -51,14 +51,14 @@ var classSession = new ClassSession { Id = 1, Capacity = 2, MaxCapacity = 2 };
     public async Task Post_ReturnsBadRequest_WhenCapacityIsExceeded()
     {
         using var context = CreateContext();
-        var classSession = new ClassSession { Id = 1, MaxCapacity = 1 };
+        var classSession = new ClassSession { Id = 1, Capacity = 1 };
         context.ClassSessions.Add(classSession);
         context.Registrations.Add(new Registration
         {
             ClassSessionId = classSession.Id,
             VisitorName = "Existing visitor",
             RegistrationDate = DateTime.UtcNow,
-            Status = "Confirmed"
+            Status = RegistrationStatus.Confirmed
         });
         await context.SaveChangesAsync();
 
@@ -92,7 +92,7 @@ var classSession = new ClassSession { Id = 1, Capacity = 2, MaxCapacity = 2 };
                 ClassSessionId = 1,
                 VisitorName = "Alex",
                 RegistrationDate = DateTime.UtcNow,
-                Status = "Confirmed"
+                Status = RegistrationStatus.Confirmed
             },
             new Registration
             {
@@ -108,7 +108,7 @@ var classSession = new ClassSession { Id = 1, Capacity = 2, MaxCapacity = 2 };
                 ClassSessionId = 1,
                 VisitorName = "Jordan",
                 RegistrationDate = DateTime.UtcNow,
-                Status = "Confirmed"
+                Status = RegistrationStatus.Confirmed
             });
         await context.SaveChangesAsync();
 
@@ -122,6 +122,48 @@ var classSession = new ClassSession { Id = 1, Capacity = 2, MaxCapacity = 2 };
         Assert.Contains(registrations, item => item.Id == 1);
         Assert.Contains(registrations, item => item.Id == 2);
         Assert.All(registrations, item => Assert.Equal("Alex", item.VisitorName));
+    }
+
+    /// <summary>Перевіряє, що на скасоване заняття зареєструватися не можна.</summary>
+    [Fact]
+    public async Task Post_ReturnsBadRequest_WhenSessionIsCancelled()
+    {
+        using var context = CreateContext();
+        var classSession = new ClassSession { Id = 1, Capacity = 10, Status = SessionStatus.Cancelled };
+        context.ClassSessions.Add(classSession);
+        await context.SaveChangesAsync();
+
+        var controller = new RegistrationController(context);
+        var registration = new Registration { ClassSessionId = classSession.Id, VisitorName = "Alex" };
+
+        var result = await controller.Post(registration);
+
+        Assert.IsType<BadRequestObjectResult>(result);
+        Assert.False(await context.Registrations.AnyAsync());
+    }
+
+    /// <summary>Перевіряє, що той самий відвідувач не може двічі зайняти місце на одному занятті.</summary>
+    [Fact]
+    public async Task Post_ReturnsConflict_WhenVisitorIsAlreadyRegistered()
+    {
+        using var context = CreateContext();
+        var classSession = new ClassSession { Id = 1, Capacity = 10 };
+        context.ClassSessions.Add(classSession);
+        context.Registrations.Add(new Registration
+        {
+            ClassSessionId = classSession.Id,
+            VisitorName = "Alex",
+            Status = RegistrationStatus.Confirmed
+        });
+        await context.SaveChangesAsync();
+
+        var controller = new RegistrationController(context);
+        var duplicate = new Registration { ClassSessionId = classSession.Id, VisitorName = "Alex" };
+
+        var result = await controller.Post(duplicate);
+
+        Assert.IsType<ConflictObjectResult>(result);
+        Assert.Equal(1, await context.Registrations.CountAsync());
     }
 
     /// <summary>Створює контекст бази даних у пам'яті з унікальною назвою для ізоляції тесту.</summary>

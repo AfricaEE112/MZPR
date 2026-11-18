@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using SportsCenter.Api;
 using SportsCenter.Api.Controllers;
 using SportsCenter.Api.Data;
 using SportsCenter.Api.Models;
@@ -33,7 +32,7 @@ public class ActivityTypesControllerTests
     {
         using var context = CreateContext();
         var controller = new ActivityTypesController(context);
-        var activityType = new ActivityType { Id = 1, Name = "Yoga" };
+        var activityType = new ActivityType { Id = 1, Name = "Yoga", DurationMinutes = 60, MaxParticipants = 15 };
 
         var result = await controller.Post(activityType);
 
@@ -50,7 +49,32 @@ public class ActivityTypesControllerTests
     {
         using var context = CreateContext();
         var controller = new ActivityTypesController(context);
-        var activityType = new ActivityType { Name = name };
+        var activityType = new ActivityType { Name = name, DurationMinutes = 60, MaxParticipants = 15 };
+
+        var result = await controller.Post(activityType);
+
+        Assert.IsType<BadRequestObjectResult>(result);
+        Assert.False(await context.ActivityTypes.AnyAsync());
+    }
+
+    /// <summary>Перевіряє, що тип заняття з некоректною тривалістю або лімітом місць не створюється (SCRUM-10).</summary>
+    /// <param name="durationMinutes">Тривалість заняття у хвилинах.</param>
+    /// <param name="maxParticipants">Максимальна кількість учасників.</param>
+    [Theory]
+    [InlineData(0, 15)]
+    [InlineData(-30, 15)]
+    [InlineData(60, 0)]
+    [InlineData(60, -5)]
+    public async Task Post_ReturnsBadRequest_WhenDurationOrLimitIsInvalid(int durationMinutes, int maxParticipants)
+    {
+        using var context = CreateContext();
+        var controller = new ActivityTypesController(context);
+        var activityType = new ActivityType
+        {
+            Name = "Yoga",
+            DurationMinutes = durationMinutes,
+            MaxParticipants = maxParticipants
+        };
 
         var result = await controller.Post(activityType);
 
@@ -63,16 +87,21 @@ public class ActivityTypesControllerTests
     public async Task Put_ReturnsNoContent_WhenUpdateIsSuccessful()
     {
         using var context = CreateContext();
-        var activityType = new ActivityType { Id = 1, Name = "Yoga" };
+        var activityType = new ActivityType { Id = 1, Name = "Yoga", DurationMinutes = 60, MaxParticipants = 15 };
         context.ActivityTypes.Add(activityType);
         await context.SaveChangesAsync();
 
         var controller = new ActivityTypesController(context);
-        var updatedActivityType = new ActivityType { Id = 1, Name = "Pilates" };
+        var updatedActivityType = new ActivityType { Id = 1, Name = "Pilates", DurationMinutes = 45, MaxParticipants = 10 };
 
         var result = await controller.Put(activityType.Id, updatedActivityType);
 
         Assert.IsType<NoContentResult>(result);
+        var saved = await context.ActivityTypes.FindAsync(activityType.Id);
+        Assert.NotNull(saved);
+        Assert.Equal("Pilates", saved.Name);
+        Assert.Equal(45, saved.DurationMinutes);
+        Assert.Equal(10, saved.MaxParticipants);
     }
 
     /// <summary>Перевіряє, що успішне видалення типу заняття прибирає запис із бази даних.</summary>
@@ -80,7 +109,7 @@ public class ActivityTypesControllerTests
     public async Task Delete_ReturnsNoContent_WhenDeleteIsSuccessful()
     {
         using var context = CreateContext();
-        var activityType = new ActivityType { Id = 1, Name = "Yoga" };
+        var activityType = new ActivityType { Id = 1, Name = "Yoga", DurationMinutes = 60, MaxParticipants = 15 };
         context.ActivityTypes.Add(activityType);
         await context.SaveChangesAsync();
 
