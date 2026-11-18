@@ -57,6 +57,31 @@ public class ActivityTypesControllerTests
         Assert.False(await context.ActivityTypes.AnyAsync());
     }
 
+    /// <summary>Перевіряє, що тип заняття з некоректною тривалістю або лімітом місць не створюється (SCRUM-10).</summary>
+    /// <param name="durationMinutes">Тривалість заняття у хвилинах.</param>
+    /// <param name="maxParticipants">Максимальна кількість учасників.</param>
+    [Theory]
+    [InlineData(0, 15)]
+    [InlineData(-30, 15)]
+    [InlineData(60, 0)]
+    [InlineData(60, -5)]
+    public async Task Post_ReturnsBadRequest_WhenDurationOrLimitIsInvalid(int durationMinutes, int maxParticipants)
+    {
+        using var context = CreateContext();
+        var controller = new ActivityTypesController(context);
+        var activityType = new ActivityType
+        {
+            Name = "Yoga",
+            DurationMinutes = durationMinutes,
+            MaxParticipants = maxParticipants
+        };
+
+        var result = await controller.Post(activityType);
+
+        Assert.IsType<BadRequestObjectResult>(result);
+        Assert.False(await context.ActivityTypes.AnyAsync());
+    }
+
     /// <summary>Перевіряє, що успішне оновлення типу заняття повертає відповідь без вмісту.</summary>
     [Fact]
     public async Task Put_ReturnsNoContent_WhenUpdateIsSuccessful()
