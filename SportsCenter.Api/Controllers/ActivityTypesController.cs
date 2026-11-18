@@ -37,10 +37,16 @@ public class ActivityTypesController : ControllerBase
     /// <param name="activityType">Дані типу заняття, який потрібно створити.</param>
     /// <returns>HTTP-відповідь із даними створеного типу заняття.</returns>
     /// <response code="201">Тип заняття успішно створено.</response>
-    /// <response code="400">Надані дані не пройшли перевірку моделі.</response>
+    /// <response code="400">Назва типу заняття порожня або дані не пройшли перевірку моделі.</response>
     [HttpPost]
     public async Task<IActionResult> Post(ActivityType activityType)
     {
+        // Не дозволяємо створити вид заняття без назви (критерій приймання SCRUM-10).
+        if (string.IsNullOrWhiteSpace(activityType.Name))
+        {
+            return BadRequest("Назва виду заняття є обов'язковою.");
+        }
+
         // Додаємо новий тип до контексту та зберігаємо його в базі даних.
         _context.ActivityTypes.Add(activityType);
         await _context.SaveChangesAsync();
