@@ -41,6 +41,23 @@ public class ActivityTypesControllerTests
         Assert.Same(activityType, createdAtActionResult.Value);
     }
 
+    /// <summary>Перевіряє, що тип заняття без назви не створюється (SCRUM-10, SCRUM-19).</summary>
+    /// <param name="name">Порожня або некоректна назва типу заняття.</param>
+    [Theory]
+    [InlineData("")]
+    [InlineData("   ")]
+    public async Task Post_ReturnsBadRequest_WhenNameIsEmpty(string name)
+    {
+        using var context = CreateContext();
+        var controller = new ActivityTypesController(context);
+        var activityType = new ActivityType { Name = name };
+
+        var result = await controller.Post(activityType);
+
+        Assert.IsType<BadRequestObjectResult>(result);
+        Assert.False(await context.ActivityTypes.AnyAsync());
+    }
+
     /// <summary>Перевіряє, що успішне оновлення типу заняття повертає відповідь без вмісту.</summary>
     [Fact]
     public async Task Put_ReturnsNoContent_WhenUpdateIsSuccessful()
