@@ -14,8 +14,9 @@ public class RegistrationController(SportsCenterDbContext context) : ControllerB
     /// <param name="registration">Дані реєстрації, зокрема заняття та відвідувача.</param>
     /// <returns>Створена реєстрація або повідомлення про причину відмови.</returns>
     /// <response code="200">Реєстрацію успішно створено.</response>
-    /// <response code="400">Заняття досягло максимальної місткості або дані не пройшли перевірку.</response>
+    /// <response code="400">Заняття скасоване, досягло максимальної місткості або дані не пройшли перевірку.</response>
     /// <response code="404">Заняття із зазначеним ідентифікатором не існує.</response>
+    /// <response code="409">Відвідувач уже зареєстрований на це заняття.</response>
     [HttpPost]
     public async Task<IActionResult> Post(Registration registration)
     {
@@ -26,6 +27,22 @@ public class RegistrationController(SportsCenterDbContext context) : ControllerB
         if (classSession is null)
         {
             return NotFound("Class session not found.");
+        }
+
+        // На скасоване заняття записатися не можна.
+        if (classSession.Status == SessionStatus.Cancelled)
+        {
+            return BadRequest("Заняття скасовано, реєстрація неможлива.");
+        }
+
+        // Один відвідувач не може двічі зайняти місце на тому самому занятті.
+        var alreadyRegistered = await context.Registrations.AnyAsync(item =>
+            item.ClassSessionId == registration.ClassSessionId &&
+            item.VisitorName == registration.VisitorName);
+
+        if (alreadyRegistered)
+        {
+            return Conflict("Відвідувач уже зареєстрований на це заняття.");
         }
 
         // Підраховуємо наявні реєстрації, щоб не перевищити місткість заняття.
@@ -40,6 +57,7 @@ public class RegistrationController(SportsCenterDbContext context) : ControllerB
 
         // Підтверджуємо заявку та зберігаємо її після успішної перевірки місткості.
         registration.Status = RegistrationStatus.Confirmed;
+        registration.RegistrationDate = DateTime.UtcNow;
         context.Registrations.Add(registration);
         await context.SaveChangesAsync();
 

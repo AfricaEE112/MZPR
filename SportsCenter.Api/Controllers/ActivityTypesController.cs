@@ -38,14 +38,15 @@ public class ActivityTypesController : ControllerBase
     /// <param name="activityType">Дані типу заняття, який потрібно створити.</param>
     /// <returns>HTTP-відповідь із даними створеного типу заняття.</returns>
     /// <response code="201">Тип заняття успішно створено.</response>
-    /// <response code="400">Назва типу заняття порожня або дані не пройшли перевірку моделі.</response>
+    /// <response code="400">Назва порожня, тривалість або ліміт місць некоректні.</response>
     [HttpPost]
     public async Task<IActionResult> Post(ActivityType activityType)
     {
-        // Не дозволяємо створити вид заняття без назви (критерій приймання SCRUM-10).
-        if (string.IsNullOrWhiteSpace(activityType.Name))
+        // Перевіряємо критерії приймання SCRUM-10 до збереження.
+        var validationError = Validate(activityType);
+        if (validationError is not null)
         {
-            return BadRequest("Назва виду заняття є обов'язковою.");
+            return BadRequest(validationError);
         }
 
         // Додаємо новий тип до контексту та зберігаємо його в базі даних.
@@ -60,7 +61,7 @@ public class ActivityTypesController : ControllerBase
     /// <param name="activityType">Оновлені дані типу заняття.</param>
     /// <returns>HTTP-відповідь про результат оновлення.</returns>
     /// <response code="204">Тип заняття успішно оновлено.</response>
-    /// <response code="400">Ідентифікатор у маршруті не збігається з ідентифікатором у даних.</response>
+    /// <response code="400">Ідентифікатори не збігаються або дані типу заняття некоректні.</response>
     /// <response code="404">Тип заняття із зазначеним ідентифікатором не знайдено.</response>
     [HttpPut("{id}")]
     public async Task<IActionResult> Put(int id, ActivityType activityType)
@@ -69,6 +70,13 @@ public class ActivityTypesController : ControllerBase
         if (id != activityType.Id)
         {
             return BadRequest();
+        }
+
+        // Оновлені дані мають відповідати тим самим правилам, що й під час створення.
+        var validationError = Validate(activityType);
+        if (validationError is not null)
+        {
+            return BadRequest(validationError);
         }
 
         // Перевіряємо наявність запису перед застосуванням змін.
@@ -107,5 +115,32 @@ public class ActivityTypesController : ControllerBase
         await _context.SaveChangesAsync();
 
         return NoContent();
+    }
+
+    /// <summary>Перевіряє дані типу заняття за правилами SCRUM-10.</summary>
+    /// <param name="activityType">Тип заняття для перевірки.</param>
+    /// <returns>Текст помилки або <c>null</c>, якщо дані коректні.</returns>
+    /// <remarks>
+    /// Атрибути [Required] і [Range] спрацьовують автоматично лише в HTTP-конвеєрі,
+    /// тому та сама перевірка дублюється тут — вона працює і під час прямого виклику в юніт-тестах.
+    /// </remarks>
+    private static string? Validate(ActivityType activityType)
+    {
+        if (string.IsNullOrWhiteSpace(activityType.Name))
+        {
+            return "Назва виду заняття є обов'язковою.";
+        }
+
+        if (activityType.DurationMinutes <= 0)
+        {
+            return "Тривалість заняття має бути більшою за нуль.";
+        }
+
+        if (activityType.MaxParticipants <= 0)
+        {
+            return "Ліміт місць має бути більшим за нуль.";
+        }
+
+        return null;
     }
 }
