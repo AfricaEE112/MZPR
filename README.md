@@ -10,9 +10,10 @@ Web API для керування спортивним центром: види 
 | --- | --- |
 | Мова і платформа | C#, .NET 8 |
 | Тип застосунку | ASP.NET Core Web API (контролери) |
-| Доступ до даних | Entity Framework Core, база InMemory |
+| Доступ до даних | Entity Framework Core, PostgreSQL (Npgsql); у тестах — InMemory |
 | Документація API | Swagger (Swashbuckle) + XML-коментарі |
 | Тести | xUnit |
+| Контейнеризація | Docker, Docker Compose, pgAdmin |
 
 ## Швидкий старт
 
@@ -22,27 +23,47 @@ Web API для керування спортивним центром: види 
 git clone https://github.com/AfricaEE112/MZPR
 cd MZPR
 
-# тести
+# тести (база даних не потрібна — використовується InMemory)
 dotnet test
-
-# запуск API
-dotnet run --project SportsCenter.Api
 ```
 
-Після запуску Swagger доступний за адресою **http://localhost:5122/swagger**.
+Запуск самого API потребує PostgreSQL, тому найпростіше запускати його через Docker Compose (див. нижче).
 
-База даних працює в пам'яті, тому після перезапуску API всі дані зникають.
+## Запуск у Docker (лабораторна робота №3)
+
+Потрібен [Docker Desktop](https://docs.docker.com/desktop/). Застосунок складається з трьох контейнерів:
+
+| Сервіс | Образ | Призначення | Адреса |
+| --- | --- | --- | --- |
+| `api` | збирається з `Dockerfile` | ASP.NET Core Web API | http://localhost:8080/swagger |
+| `postgres` | `postgres:16-alpine` | база даних | `localhost:5432` |
+| `pgadmin` | `dpage/pgadmin4` | веб-інтерфейс для БД | http://localhost:5050 |
+
+```bash
+cp .env.example .env        # задайте свої логіни й паролі в .env
+docker compose up --build -d
+```
+
+- Усі контейнери працюють в одній мережі `sportscenter_net`; API підключається до БД за іменем сервісу `postgres`.
+- Дані PostgreSQL зберігаються в Docker Volume `postgres_data` і переживають перезапуск (`docker compose down` / `up`). Щоб видалити й дані: `docker compose down -v`.
+- Параметри підключення та паролі передаються через змінні середовища з файлу `.env` (він у `.gitignore`).
+- Таблиці створюються автоматично під час першого запуску API.
+
+Підключення в pgAdmin: *Register → Server*, host `postgres`, port `5432`, логін і пароль із `.env` (`POSTGRES_USER`, `POSTGRES_PASSWORD`).
 
 ## Структура
 
 ```
 SportsCenter.sln
 ├── SportsCenter.Api/
-│   ├── Program.cs              # реєстрація сервісів (DI), база InMemory, Swagger
+│   ├── Program.cs              # реєстрація сервісів (DI), PostgreSQL, Swagger
 │   ├── Data/                   # SportsCenterDbContext (EF Core)
 │   ├── Models/                 # сутності та константи статусів
 │   └── Controllers/            # ендпоінти та бізнес-правила
 └── SportsCenter.Tests/         # xUnit-тести, по одному класу на контролер
+Dockerfile                      # образ Web API
+docker-compose.yaml             # api + postgres + pgadmin
+.env.example                    # шаблон змінних середовища
 ```
 
 ## Ендпоінти

@@ -1,34 +1,43 @@
 using Microsoft.EntityFrameworkCore;
 using SportsCenter.Api.Data;
 
+// Дозволяє Npgsql коректно працювати з DateTime без суворої прив'язки до UTC
+AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
+
 var builder = WebApplication.CreateBuilder(args);
 
-// Реєструємо контролери та контекст бази даних у контейнері залежностей.
-
+// Реєструємо контролери та контекст бази даних PostgreSQL
 builder.Services.AddControllers();
 builder.Services.AddDbContext<SportsCenterDbContext>(options =>
-    options.UseInMemoryDatabase("SportsCenterDb"));
+    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>
 {
-    // Підключаємо XML-документацію API, зокрема описи можливих HTTP-відповідей.
-    options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, "SportsCenter.Api.xml"));
+    var xmlPath = Path.Combine(AppContext.BaseDirectory, "SportsCenter.Api.xml");
+    if (File.Exists(xmlPath))
+    {
+        options.IncludeXmlComments(xmlPath);
+    }
 });
 
 var app = builder.Build();
 
-// Вмикаємо Swagger лише в середовищі розробки.
+// Автоматично створюємо таблиці в PostgreSQL при першому запуску
+using (var scope = app.Services.CreateScope())
+{
+    var db = scope.ServiceProvider.GetRequiredService<SportsCenterDbContext>();
+    db.Database.EnsureCreated();
+}
+
+// Вмикаємо Swagger у середовищі розробки (у docker-compose передаємо Development)
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
-
 app.UseAuthorization();
-
-// Відображаємо маршрути контролерів як HTTP-кінцеві точки.
 app.MapControllers();
 
 app.Run();
